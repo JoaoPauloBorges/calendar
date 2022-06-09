@@ -3,21 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@craco/craco": "^6.4.3",
     "@reduxjs/toolkit": "^1.8.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
+    "@types/antd": "^1.0.0",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/react-router-dom": "^5.3.3",
+    "antd": "^4.21.0",
+    "craco-less": "^2.0.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-redux": "^8.0.2",
@@ -48,5 +52,10 @@
   "devDependencies": {
     "@redux-devtools/core": "^3.13.1",
     "@types/styled-components": "^5.1.25"
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "/node_modules/(?!antd|@ant-design|rc-.+?|@babel/runtime).+(js|jsx)$"
+    ]
   }
 }

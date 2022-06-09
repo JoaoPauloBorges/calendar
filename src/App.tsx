@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import "./App.css";
+import "./App.less";
 import { BrowserRouter } from "react-router-dom";
 import Routes from "routes";
 import { Provider } from "react-redux";
