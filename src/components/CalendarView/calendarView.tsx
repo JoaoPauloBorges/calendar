@@ -1,7 +1,13 @@
+import { Unsubscribe } from "@reduxjs/toolkit";
 import { notification } from "antd";
 import { FC, useEffect, useState } from "react";
+import store from "store";
 import { Grid } from "./grid";
 import Month from "./Month";
+import {
+  decreaseMonth,
+  increaseMonth,
+} from "./stateManagement/current-date.reducer";
 
 let xDown = 0;
 let yDown = 0;
@@ -66,48 +72,35 @@ const isMobileDevice = () => {
   return isMobile;
 };
 
-const getMonthName = (month: number) => {
-  const date = new Date();
-  date.setMonth(month);
-  return date.toLocaleDateString("default", { month: "long" });
-};
+const daysOfTheWeek = [
+  <div key={1}>Sun</div>,
+  <div key={2}>Mon</div>,
+  <div key={3}>Tue</div>,
+  <div key={4}>Wed</div>,
+  <div key={5}>Thu</div>,
+  <div key={6}>Fri</div>,
+  <div key={7}>Sat</div>,
+];
 
 const CalendarView: FC = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
-
-  const increaseCurrentMonth = () => {
-    setCurrentDate((current) => new Date(current.getFullYear(), current.getMonth() + 1, 1));
-  };
-
-  const decreaseCurrentMonth = () => {
-    setCurrentDate((current) => new Date(current.getFullYear(), current.getMonth() - 1, 1));
-  };
-
-  const daysOfTheWeek = [
-    <div key={1}>Sun</div>,
-    <div key={2}>Mon</div>,
-    <div key={3}>Tue</div>,
-    <div key={4}>Wed</div>,
-    <div key={5}>Thu</div>,
-    <div key={6}>Fri</div>,
-    <div key={7}>Sat</div>,
-  ];
+  const [currentDate, setCurrentDate] = useState(
+    store.getState().currentDate
+  );
+  let unsub: Unsubscribe;
 
   const handleTouchEnd = (evt: any) => {
     if (decrease === null) return;
     if (decrease) {
-      decreaseCurrentMonth();
-      return;
+      return store.dispatch(decreaseMonth());
     }
-    increaseCurrentMonth();
+    store.dispatch(increaseMonth());
   };
 
   const handleScroll = (event: WheelEvent) => {
     if (event.deltaY > 0) {
-      increaseCurrentMonth();
-      return;
+      return store.dispatch(increaseMonth());
     }
-    decreaseCurrentMonth();
+    store.dispatch(decreaseMonth());
   };
 
   useEffect(() => {
@@ -125,14 +118,18 @@ const CalendarView: FC = () => {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    unsub = store.subscribe(() => {
+      setCurrentDate(store.getState().currentDate);
+    });
     showTipChangeMonth();
+    return () => {
+      unsub();
+    };
   }, []);
 
   return (
     <>
-      {currentDate.getFullYear()}
-      <br />
-      {getMonthName(currentDate.getMonth())}
       <Grid>
         {daysOfTheWeek}
         <Month

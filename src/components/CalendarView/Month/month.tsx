@@ -1,20 +1,14 @@
 import { FC } from "react";
 import Day from "../Day";
 
-const getMonthDays = (month: number, year:number) => {
+const getMonthDays = (month: number, year: number) => {
   return new Date(year, month + 1, 0).getDate();
 };
-const getFirstDayOfTheWeek = (
-  month: number,
-  year: number
-) => {
+const getFirstDayOfTheWeek = (month: number, year: number) => {
   return new Date(year, month, 1).getDay() + 1;
 };
 
-const getLastDayOfTheWeek = (
-  month: number,
-  year: number
-) => {
+const getLastDayOfTheWeek = (month: number, year: number) => {
   return new Date(year, month, getMonthDays(month, year)).getDay() + 1;
 };
 
@@ -25,6 +19,11 @@ interface Props {
 
 const Month: FC<Props> = ({ month, year }) => {
   const days = [];
+
+  const isCurrentDay = (i: number) => {
+    const curr = new Date();
+    return curr.getDate() === i && curr.getMonth() === month;
+  };
 
   const daysCurrentMonth = getMonthDays(month, year);
   const daysPastMonth = getMonthDays(month - 1 === -1 ? 0 : month - 1, year);
@@ -43,7 +42,13 @@ const Month: FC<Props> = ({ month, year }) => {
   }
 
   for (let i = 1; i <= daysCurrentMonth; i++) {
-    days.push(<Day key={"current" + i} date={new Date(year, month, i)} />);
+    days.push(
+      <Day
+        key={"current" + i}
+        current={isCurrentDay(i)}
+        date={new Date(year, month, i)}
+      />
+    );
   }
 
   for (let i = 1; i <= 7 - lastDayOfTheWeak; i++) {
