@@ -73,24 +73,24 @@ const getMonthName = (month: number) => {
 };
 
 const CalendarView: FC = () => {
-  const [currentDate, setBosta] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   const increaseCurrentMonth = () => {
-    setBosta((bosta) => new Date(bosta.getFullYear(), bosta.getMonth() +1, 1));
+    setCurrentDate((current) => new Date(current.getFullYear(), current.getMonth() + 1, 1));
   };
 
   const decreaseCurrentMonth = () => {
-    setBosta((bosta) => new Date(bosta.getFullYear(), bosta.getMonth() -1, 1));
+    setCurrentDate((current) => new Date(current.getFullYear(), current.getMonth() - 1, 1));
   };
 
   const daysOfTheWeek = [
-    <div>Sun</div>,
-    <div>Mon</div>,
-    <div>Tue</div>,
-    <div>Wed</div>,
-    <div>Thu</div>,
-    <div>Fri</div>,
-    <div>Sat</div>,
+    <div key={1}>Sun</div>,
+    <div key={2}>Mon</div>,
+    <div key={3}>Tue</div>,
+    <div key={4}>Wed</div>,
+    <div key={5}>Thu</div>,
+    <div key={6}>Fri</div>,
+    <div key={7}>Sat</div>,
   ];
 
   const handleTouchEnd = (evt: any) => {
@@ -130,14 +130,15 @@ const CalendarView: FC = () => {
 
   return (
     <>
-      <div>
-        {currentDate.getFullYear()}
-        <br />
-        {getMonthName(currentDate.getMonth())}
-      </div>
+      {currentDate.getFullYear()}
+      <br />
+      {getMonthName(currentDate.getMonth())}
       <Grid>
         {daysOfTheWeek}
-        <Month month={currentDate.getMonth()} year={currentDate.getFullYear()} />
+        <Month
+          month={currentDate.getMonth()}
+          year={currentDate.getFullYear()}
+        />
       </Grid>
     </>
   );
