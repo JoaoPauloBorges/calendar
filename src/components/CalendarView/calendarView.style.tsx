@@ -3,16 +3,17 @@ import styled from "styled-components";
 export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: 1.5rem repeat(5, 100px);
-  grid-auto-rows: 100px;
+  grid-auto-rows: minmax(100px, 1fr);
+  grid-template-rows: 2rem  repeat(5, minmax(100px, 1fr));
   & > .Day,
-  .DaysOfWeek {
+  .CalendarView--DaysOfWeek {
     display: block;
-    padding-top: 1rem;
+    padding-top: .5rem;
     border: solid 1px #d7d7d730;
+    margin: 0;
   }
 
-  & > .DaysOfWeek {
+  & > .CalendarView--DaysOfWeek {
     padding-top: 0;
     background-color: greenyellow;
   }

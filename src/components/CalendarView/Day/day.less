@@ -1,8 +1,19 @@
-.Day--disable {
-  pointer-events: none;
-  background-color: #959494;
-}
+.Day {
+  &.Day--disable {
+    pointer-events: none;
+    background-color: #959494;
+  }
 
-.Day--current {
-  background-color: greenyellow;
+  &.Day--current {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  &.Day--current > .Day--circle {
+    background-color: greenyellow;
+    border-radius: 50%;
+    width: 3rem;
+    height: 2rem;
+    display: inline-block;
+  }
 }

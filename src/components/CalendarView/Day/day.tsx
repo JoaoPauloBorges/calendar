@@ -22,7 +22,8 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
         "Day--current": current,
       })}
     >
-      {day}
+     <h5 className="Day--circle">{day}</h5>
+      
     </div>
   );
 };

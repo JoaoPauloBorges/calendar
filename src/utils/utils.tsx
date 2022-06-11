@@ -3,11 +3,7 @@ export function getWeekNames(locale = "en-US") {
   var weekDays: any[] = [];
   for (let i = 1; i <= 7; i++) {
     const weekName = baseDate.toLocaleDateString(locale, { weekday: "short" });
-    weekDays.push(
-      <div className="DaysOfWeek" key={i}>
-        {weekName}
-      </div>
-    );
+    weekDays.push(weekName)
     baseDate.setDate(baseDate.getDate() + 1);
   }
   return weekDays;

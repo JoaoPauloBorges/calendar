@@ -37,7 +37,7 @@ const LayoutHeader: FC = () => {
     <StyledHeader>
       <StyledMenu>
         <StyledLogo>
-          <Button onClick={() => dispatch(reset())}> 2Day </Button>
+          <Button type="primary" style={{color: "black", fontWeight: "bolder"}} onClick={() => dispatch(reset())}> 2Day </Button>
         </StyledLogo>
 
       </StyledMenu>

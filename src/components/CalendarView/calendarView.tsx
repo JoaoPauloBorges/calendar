@@ -1,9 +1,12 @@
 import { notification } from "antd";
-import { Directions, selectTouchEvent } from "components/hooks/touchEvents/touchEvent.slice";
+import {
+  Directions,
+  selectTouchEvent,
+} from "components/hooks/touchEvents/touchEvent.slice";
 import { useTouchEvents } from "components/hooks/touchEvents/touchEvents.hook";
 import { FC, useEffect } from "react";
 import { getWeekNames } from "utils/utils";
-import { Grid } from "./grid.style";
+import { Grid } from "./calendarView.style";
 import Month from "./Month";
 import {
   decreaseMonth,
@@ -18,6 +21,12 @@ const CalendarView: FC = () => {
   const touchEvent = useSelector(selectTouchEvent);
 
   const { isTouchDevice, isMobileDevice } = useTouchEvents();
+
+  const weekNames = getWeekNames().map((weekName, idx) => (
+    <h4 className="CalendarView--DaysOfWeek" key={idx}>
+      {weekName}
+    </h4>
+  ));
 
   const showTipChangeMonth = () => {
     const isSwipeable = isTouchDevice() || isMobileDevice();
@@ -67,15 +76,14 @@ const CalendarView: FC = () => {
     };
   }, []);
 
-
   useEffect(() => {
-    handleSwipe(touchEvent)
+    handleSwipe(touchEvent);
   }, [touchEvent]);
 
   return (
     <>
       <Grid>
-        {getWeekNames()}
+        {weekNames}
         <Month
           month={new Date(currentDate).getMonth()}
           year={new Date(currentDate).getFullYear()}
