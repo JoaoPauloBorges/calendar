@@ -1,4 +1,4 @@
 import Month from "./month";
 
 
-export default Month;
+export default Month
