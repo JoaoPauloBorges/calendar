@@ -1,9 +1,6 @@
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import { Unsubscribe } from "@reduxjs/toolkit";
-import { Button, Layout as AntdLayout, Menu, Row } from "antd";
-import { FC, useEffect, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
-import store from "store";
+import { Button, Layout as AntdLayout } from "antd";
+import { FC } from "react";
 import {
   ButtonLeft,
   ButtonRight,
@@ -21,7 +18,10 @@ import {
   decreaseMonth,
   increaseMonth,
   reset,
-} from "./../CalendarView/stateManagement/current-date.reducer";
+  selectCurrentDate,
+} from "../CalendarView/stateManagement/current-date.slice";
+import { useSelector, useDispatch } from "react-redux";
+
 
 const getMonthName = (month: number) => {
   const date = new Date();
@@ -30,63 +30,36 @@ const getMonthName = (month: number) => {
 };
 
 const LayoutHeader: FC = () => {
-  // const location = useLocation();
+  const currentDate = useSelector(selectCurrentDate);
+  const dispatch = useDispatch();
 
-  const [currentDate, setCurrentDate] = useState(store.getState().currentDate);
-
-  let unsub: Unsubscribe;
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    unsub = store.subscribe(() => {
-      setCurrentDate(store.getState().currentDate);
-    });
-    return () => unsub();
-  }, []);
   return (
     <StyledHeader>
       <StyledMenu>
         <StyledLogo>
-          <Button onClick={() => store.dispatch(reset())}> 2Day </Button>
-          {/* <NavLink to="/">Calendar</NavLink> */}
+          <Button onClick={() => dispatch(reset())}> 2Day </Button>
         </StyledLogo>
-        {/* <Menu
-          theme="light"
-          mode="horizontal"
-          activeKey={location.pathname}
-          selectedKeys={[location.pathname]}
-          items={[
-            {
-              label: (
-                <>
-                  Home
-                  <NavLink to="/" />
-                </>
-              ),
-              key: "/",
-            },
-          ]}
-        /> */}
+
       </StyledMenu>
       <StyledActions>
-        <Year>{currentDate.getFullYear()}</Year>
+        <Year>{new Date(currentDate).getFullYear()}</Year>
         <ButtonLeft
           icon={<LeftOutlined />}
           ghost
           shape="circle"
-          onClick={() => store.dispatch(decreaseMonth())}
+          onClick={() => dispatch(decreaseMonth())}
         />
-        <Month>{getMonthName(currentDate.getMonth())}</Month>
+        <Month>{getMonthName(new Date(currentDate).getMonth())}</Month>
         <ButtonRight
           icon={<RightOutlined />}
           ghost
           shape="circle"
-          onClick={() => store.dispatch(increaseMonth())}
+          onClick={() => dispatch(increaseMonth())}
         />
       </StyledActions>
       <ThemeActions>
-        <Button ghost type="link" icon={<div>😎</div>} />
-        <Button ghost type="link" icon={<div>🌚</div>} />
+        <Button type="link" icon={<div>😎</div>} />
+        <Button type="link" icon={<div>🌚</div>} />
       </ThemeActions>
     </StyledHeader>
   );

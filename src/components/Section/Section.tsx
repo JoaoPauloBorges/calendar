@@ -4,7 +4,6 @@ export const Section = styled.section`
   width: fit-content;
   background-color: #f9feff;
   border-radius: 10px;
-  /* border: solid 1px #d7d7d7 ; */
   margin: 0 auto;
   width: 60%;
   text-align: center;

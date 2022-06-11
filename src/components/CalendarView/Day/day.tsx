@@ -1,4 +1,7 @@
+import classNames from "classnames";
 import { FC, useEffect, useState } from "react";
+
+import "./day.less";
 
 interface Props {
   date: Date;
@@ -14,13 +17,10 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
 
   return (
     <div
-      style={
-        disable
-          ? { pointerEvents: "none", backgroundColor: "#959494" }
-          : current
-          ? {backgroundColor: "greenyellow" }
-          : {}
-      }
+      className={classNames("Day", {
+        "Day--disable": disable,
+        "Day--current": current,
+      })}
     >
       {day}
     </div>
