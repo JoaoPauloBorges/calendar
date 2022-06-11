@@ -18,14 +18,6 @@ export const Grid = styled.div`
     background-color: greenyellow;
   }
 
-  & > .Day:nth-child(1) {
-    border-top-left-radius: 10px;
-  }
-
-  & > .Day:nth-child(7) {
-    border-top-right-radius: 10px;
-  }
-
   & > .Day:nth-last-child(7) {
     border-bottom-left-radius: 10px;
   }
