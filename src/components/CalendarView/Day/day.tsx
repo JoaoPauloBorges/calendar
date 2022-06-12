@@ -169,6 +169,7 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
 
   const myReminders = (useSelector(selectAllReminders) as ReminderStateItem[])
     .filter((reminder) => isMyReminder(reminder.when))
+    .sort((a, b) => a.when - b.when)
     .map((item, idx) => <Reminder key={idx} reminder={item} />);
 
   return (
