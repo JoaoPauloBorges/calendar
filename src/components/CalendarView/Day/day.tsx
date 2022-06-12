@@ -163,9 +163,13 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
     });
   };
 
-  const reminders = (
-    useSelector(selectAllReminders) as ReminderStateItem[]
-  ).map((item, idx) => <Reminder key={idx} reminder={item} />);
+  const isMyReminder = (when: number) => {
+    return new Date(when).toDateString() === new Date(date).toDateString();
+  };
+
+  const myReminders = (useSelector(selectAllReminders) as ReminderStateItem[])
+    .filter((reminder) => isMyReminder(reminder.when))
+    .map((item, idx) => <Reminder key={idx} reminder={item} />);
 
   return (
     <section
@@ -177,9 +181,7 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
     >
       <h5 className={classes("CurrentDayFlag")}>{date.getDate()}</h5>
 
-      <section className={classes("RemindersContainer")}>
-        {current ? reminders : <></>}
-      </section>
+      <section className={classes("RemindersContainer")}>{myReminders}</section>
     </section>
   );
 };

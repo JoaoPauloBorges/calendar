@@ -60,12 +60,14 @@ const Reminder: FC<Props> = ({ reminder, className }) => {
 
   const RemainderDetails = (
     <div>
-      <Row justify="start">
-        <Button onClick={showEditModal} icon={<EditOutlined />} />
-        <Button onClick={handleDelete} icon={<DeleteOutlined />} />
-      </Row>
-      <div>{reminder.description}</div>
+      <h2>{reminder.description}</h2>
       <div>{new Date(reminder.when).toString()}</div>
+      <br/>
+      <br/>
+      <section className={classes("Details-actions")}>
+        <Button shape="circle" onClick={showEditModal} icon={<EditOutlined />} />
+        <Button shape="circle" onClick={handleDelete} icon={<DeleteOutlined />} />
+      </section>
     </div>
   );
 
