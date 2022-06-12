@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export enum Colors {
-  PURPLE = "purple",
-  BLUE = "royalblue",
-  ORANGE = "orange",
-  RED = "red",
-  GREEN = "green",
-  INDIGO = "indigo",
-  VIOLET = "violet",
+  COLOR1 = "#f1522e",
+  COLOR2 = "#C70039",
+  COLOR3 = "#efb800",
+  COLOR4 = "#5473ff",
+  COLOR5 = "#6600ff",
+  COLOR6 = "#581845",
+  COLOR7 = "violet",
 }
 
 export class ReminderStateItem {
@@ -38,12 +38,12 @@ const remindersSlice = createSlice({
       state.push(payload);
     },
     editReminder(state, { payload }: { payload: ReminderStateItem }) {
-      const filtered = state.filter(
-        (reminder) => reminder.createdAt !== payload.createdAt
-      );
-      if (filtered.length === state.length) return state;
-
-      return [...filtered, payload];
+      return state.map((reminder) => {
+        if (reminder.createdAt !== payload.createdAt) {
+          return reminder;
+        }
+        return { ...payload, createdAt: reminder.createdAt };
+      });
     },
     deleteReminder(state, { payload }: { payload: ReminderStateItem }) {
       return state.filter(

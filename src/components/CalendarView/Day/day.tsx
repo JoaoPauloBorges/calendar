@@ -1,6 +1,7 @@
 import { FormOutlined } from "@ant-design/icons";
-import { Form, Input, Modal, TimePicker } from "antd";
-import { FC, useEffect, useMemo } from "react";
+import { Form, Input, Modal, Select, TimePicker } from "antd";
+import moment from "moment";
+import { FC, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { generateClassNamesWithBaseClass } from "utils/utils";
 import Reminder from "../reminder";
@@ -12,15 +13,46 @@ import {
 } from "../reminder/stateManagement/reminders.slice";
 import "./day.less";
 
+const { Option } = Select;
+
 export const getAddReminderForm = (
   form: any,
   date: Date,
-  handleSubmit: (values: any) => void
+  handleSubmit: (values: any) => void,
+  valuesToEdit?: ReminderStateItem
 ) => {
   const handleTimeChange = (time: any) => {
     form.setFields([{ name: "when", value: time, touched: true }]);
     form.validateFields(["when"]);
   };
+
+  if (!!valuesToEdit) {
+    form.setFields([
+      { name: "when", value: moment(valuesToEdit.when), touched: true },
+      { name: "color", value: valuesToEdit.color, touched: true },
+      { name: "description", value: valuesToEdit.description, touched: true },
+    ]);
+
+    form.validateFields(["when", "color", "description"]);
+  }
+
+  const colors = Object.values(Colors);
+  const options = colors.map((color, idx) => (
+    <Option key={idx} value={color}>
+      <span
+        style={{
+          content: "",
+          background: `${color}`,
+          borderRadius: "50%",
+          width: "20px",
+          height: "20px",
+          display: "block",
+          position: "absolute",
+          top: "20%",
+        }}
+      ></span>
+    </Option>
+  ));
 
   Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
   return (
@@ -67,6 +99,11 @@ export const getAddReminderForm = (
             style={{ width: 140 }}
           />
         </Form.Item>
+        <Form.Item name="color" initialValue={colors[0]}>
+          <Select size="large" style={{ width: "20%" }}>
+            {options}
+          </Select>
+        </Form.Item>
       </Form>
     </div>
   );
@@ -85,15 +122,13 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
   const dispatch = useDispatch();
 
   const handleSubmit = (values: any) => {
-    console.log(values);
     const hours = values.when.format("HH:mm").split(":");
     const when = new Date(date).setHours(hours[0], hours[1], 0);
     dispatch(
       addReminder({
-        color: Colors.ORANGE,
-        createdAt: new Date().getTime(),
+        ...values,
         when,
-        description: values.description,
+        createdAt: new Date().getTime(),
       } as ReminderStateItem)
     );
 
@@ -142,10 +177,7 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
     >
       <h5 className={classes("CurrentDayFlag")}>{date.getDate()}</h5>
 
-      <section
-        style={{ width: "100%", backgroundColor: "green" }}
-        className={classes("RemindersContainer")}
-      >
+      <section className={classes("RemindersContainer")}>
         {current ? reminders : <></>}
       </section>
     </section>
