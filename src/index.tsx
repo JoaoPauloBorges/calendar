@@ -8,12 +8,10 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    {" "}
-    {/*it makes react render twice*/}
+  // <React.StrictMode>    {/*it makes react render twice*/}
     <App />
     //{" "}
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,6 +1,6 @@
 import { FormOutlined } from "@ant-design/icons";
 import { Form, Input, Modal, TimePicker } from "antd";
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { generateClassNamesWithBaseClass } from "utils/utils";
 import Reminder from "../reminder";
@@ -14,14 +14,20 @@ import "./day.less";
 
 export const getAddReminderForm = (
   form: any,
+  date: Date,
   handleSubmit: (values: any) => void
 ) => {
   const handleTimeChange = (time: any) => {
     form.setFields([{ name: "when", value: time, touched: true }]);
     form.validateFields(["when"]);
   };
+
+  Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
   return (
     <div>
+      <h2>
+        {new Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(date)}
+      </h2>
       <Form
         name="reminder"
         autoComplete="on"
@@ -72,6 +78,11 @@ interface Props {
   disable?: boolean;
 }
 const Day: FC<Props> = ({ date, disable = false, current = false }) => {
+  useEffect(() => {
+      console.log("nasciii");
+    return () => console.log("morriii")
+  }, []);
+
   const PrefixClassName = "Day";
   const classes = generateClassNamesWithBaseClass(PrefixClassName);
 
@@ -99,7 +110,10 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
     Modal.destroyAll();
   };
 
-  const content = useMemo(() => getAddReminderForm(form, handleSubmit), []);
+  const content = useMemo(
+    () => getAddReminderForm(form, date, handleSubmit),
+    []
+  );
 
   const showModal = () => {
     Modal.confirm({
