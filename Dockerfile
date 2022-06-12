@@ -6,9 +6,9 @@ RUN yarn install
 COPY . .
 RUN yarn build
 
-FROM nginx:alpine AS frontend
+FROM nginx:latest AS frontend
 VOLUME /var/cache/nginx
 COPY --from=build app/build/ usr/share/nginx/html
-COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx/heroku.nginx.conf /etc/nginx/conf.d/default.conf.template
 
-EXPOSE 80
+CMD /bin/sh -c "envsubst '\$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf" && nginx -g 'daemon off;'
