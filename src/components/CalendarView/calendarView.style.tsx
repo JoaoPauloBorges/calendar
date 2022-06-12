@@ -8,7 +8,7 @@ export const Grid = styled.div`
   & > .Day,
   .CalendarView--DaysOfWeek {
     display: block;
-    padding-top: .5rem;
+    padding-top: .2rem;
     border: solid 1px #d7d7d730;
     margin: 0;
   }

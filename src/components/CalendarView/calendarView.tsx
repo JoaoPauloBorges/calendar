@@ -2,8 +2,8 @@ import { notification } from "antd";
 import {
   Directions,
   selectTouchEvent,
-} from "components/hooks/touchEvents/touchEvent.slice";
-import { useTouchEvents } from "components/hooks/touchEvents/touchEvents.hook";
+} from "hooks/touchEvents/touchEvent.slice";
+import { useTouchEvents } from "hooks/touchEvents/touchEvents.hook";
 import { FC, useEffect } from "react";
 import { getWeekNames } from "utils/utils";
 import { Grid } from "./calendarView.style";

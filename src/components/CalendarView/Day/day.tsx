@@ -1,7 +1,70 @@
+import { FormOutlined } from "@ant-design/icons";
+import { Form, Input, Modal, TimePicker } from "antd";
 import classNames from "classnames";
-import { FC, useEffect, useState } from "react";
-
+import { FC, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Reminder from "../reminder";
+import {
+  addReminder,
+  Colors,
+  ReminderStateItem,
+  selectAllReminders,
+} from "../reminder/stateManagement/reminders.slice";
 import "./day.less";
+
+export const getAddReminderForm = (
+  form: any,
+  handleSubmit: (values: any) => void
+) => {
+  const handleTimeChange = (time: any) => {
+    form.setFields([{ name: "when", value: time, touched: true }]);
+    form.validateFields(["when"]);
+  };
+  return (
+    <div>
+      <Form
+        name="reminder"
+        autoComplete="on"
+        form={form}
+        onFinish={handleSubmit}
+      >
+        <Form.Item
+          name="description"
+          rules={[
+            {
+              required: true,
+              message: "Please input your reminder description!",
+            },
+          ]}
+        >
+          <Input
+            allowClear
+            addonBefore={<FormOutlined />}
+            placeholder="Description"
+          />
+        </Form.Item>
+        <Form.Item
+          shouldUpdate
+          name="when"
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: "Please input for when your reminder should be set!",
+            },
+          ]}
+        >
+          <TimePicker
+            onSelect={(time) => handleTimeChange(time)}
+            use12Hours
+            format="h:mm A"
+            style={{ width: 140 }}
+          />
+        </Form.Item>
+      </Form>
+    </div>
+  );
+};
 
 interface Props {
   date: Date;
@@ -9,22 +72,75 @@ interface Props {
   disable?: boolean;
 }
 const Day: FC<Props> = ({ date, disable = false, current = false }) => {
-  let [day, setDay] = useState(0);
+  const PrefixClassName = "Day";
 
-  useEffect(() => {
-    setDay(date.getDate());
-  }, [date]);
+  const [form] = Form.useForm();
+  const dispatch = useDispatch();
+
+  const handleSubmit = (values: any) => {
+    console.log(values);
+    const hours = values.when.format("HH:mm").split(":");
+    const when = new Date(date).setHours(hours[0], hours[1], 0);
+    dispatch(
+      addReminder({
+        color: Colors.ORANGE,
+        createdAt: new Date().getTime(),
+        when,
+        description: values.description,
+      } as ReminderStateItem)
+    );
+
+    handleModalCancel();
+  };
+
+  const handleModalCancel = () => {
+    form.resetFields();
+    Modal.destroyAll();
+  };
+
+  const content = useMemo(() => getAddReminderForm(form, handleSubmit), []);
+
+  const showModal = () => {
+    Modal.confirm({
+      icon: <></>,
+      content: content,
+      closable: true,
+      centered: true,
+      direction: "ltr",
+      maskClosable: true,
+      onCancel: handleModalCancel,
+      okButtonProps: {
+        onClick: () => form.submit(),
+        style: { color: "black" },
+      },
+      okCancel: false,
+      okText: "Save",
+    });
+  };
+
+  const reminders = (
+    useSelector(selectAllReminders) as ReminderStateItem[]
+  ).map((item, idx) => <Reminder key={idx} reminder={item} />);
 
   return (
-    <div
-      className={classNames("Day", {
+    <section
+      onClick={() => showModal()}
+      className={classNames(PrefixClassName, {
         "Day--disable": disable,
         "Day--current": current,
       })}
     >
-     <h5 className="Day--circle">{day}</h5>
-      
-    </div>
+      <h5 className={classNames(PrefixClassName, "Day--circle")}>
+        {date.getDate()}
+      </h5>
+
+      <section
+        style={{ width: "100%", backgroundColor: "green" }}
+        className={classNames(PrefixClassName, "RemindersContainer")}
+      >
+        {current ? reminders : <></>}
+      </section>
+    </section>
   );
 };
 

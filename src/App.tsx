@@ -5,7 +5,7 @@ import Routes from "routes";
 import { Provider } from "react-redux";
 import store from "store";
 import Layout from "components/Layout";
-import { TouchEventsProvider } from "components/hooks/touchEvents/touchEvents.hook";
+import { TouchEventsProvider } from "hooks/touchEvents/touchEvents.hook";
 
 const App: FC = () => (
   <Provider store={store}>
