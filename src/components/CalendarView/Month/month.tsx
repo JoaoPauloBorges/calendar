@@ -17,11 +17,6 @@ const isCurrentDay = (i: number, month: number) => {
   return curr.getDate() === i && curr.getMonth() === month;
 };
 
-interface Props {
-  month: number;
-  year: number;
-}
-
 const fillPastMonth = (year: number, month: number) => {
   const startDayOfTheWeak = getFirstDayOfTheWeek(month, year);
   const pastMonthTotalDays = getMonthDays(
@@ -31,9 +26,13 @@ const fillPastMonth = (year: number, month: number) => {
 
   const daysPastMonth: any[] = [];
   for (let i = startDayOfTheWeak - 1; i >= 1; i--) {
-    daysPastMonth.push({
-      date: new Date(year, month - 1, pastMonthTotalDays + 1 - i),
-    });
+    daysPastMonth.push(
+      <Day
+        key={"past" + i}
+        disable
+        date={new Date(year, month - 1, pastMonthTotalDays + 1 - i)}
+      />
+    );
   }
   return daysPastMonth;
 };
@@ -43,10 +42,13 @@ const fillCurrentMonth = (year: number, month: number) => {
 
   const daysCurrentMonth: any[] = [];
   for (let i = 1; i <= currentMonthTotaldays; i++) {
-    daysCurrentMonth.push({
-      date: new Date(year, month, i),
-      current: isCurrentDay(i, month),
-    });
+    daysCurrentMonth.push(
+      <Day
+        key={"current" + i}
+        current={isCurrentDay(i, month)}
+        date={new Date(year, month, i)}
+      />
+    );
   }
   return daysCurrentMonth;
 };
@@ -56,11 +58,18 @@ const fillNextMonth = (year: number, month: number) => {
 
   const daysNextMonth: any[] = [];
   for (let i = 1; i <= 7 - lastDayOfTheWeak; i++) {
-    daysNextMonth.push({ date: new Date(year, month + 1, i) });
+    daysNextMonth.push(
+      <Day key={"next" + i} disable date={new Date(year, month + 1, i)} />
+    );
   }
 
   return daysNextMonth;
 };
+
+interface Props {
+  month: number;
+  year: number;
+}
 
 const Month: FC<Props> = ({ month, year }) => {
   const [daysPastMonth, setDaysPastMonth] = useState<any[]>([]);
@@ -68,39 +77,16 @@ const Month: FC<Props> = ({ month, year }) => {
   const [daysNextMonth, setDaysNextMonth] = useState<any[]>([]);
 
   useEffect(() => {
-    console.log("mudei", { month });
-
-    const past = fillPastMonth(year, month);
-    console.log({ past });
-    setDaysPastMonth((item) => [...past]);
-    console.log({ daysPastMonth });
-
-    const current = fillCurrentMonth(year, month);
-    console.log({ current });
-    setDaysCurrentMonth((item) => [...current]);
-    console.log({ daysCurrentMonth });
-
-    const next = fillNextMonth(year, month);
-    console.log({ next });
-    setDaysNextMonth((item) => [...next]);
-    console.log({ daysNextMonth });
-
-    return () => {
-      console.log("morri", { month });
-    };
+    setDaysPastMonth(fillPastMonth(year, month));
+    setDaysCurrentMonth(fillCurrentMonth(year, month));
+    setDaysNextMonth(fillNextMonth(year, month));
   }, [month]);
 
   return (
     <>
-      {daysPastMonth.map((item, idx) => (
-        <Day key={"past" + idx} disable date={item.date} />
-      ))}
-      {daysCurrentMonth.map((item, idx) => (
-        <Day key={"current" + idx} current={item.current} date={item.date} />
-      ))}
-      {daysNextMonth.map((item, idx) => (
-        <Day key={"next" + idx} disable date={item.date} />
-      ))}
+      {daysPastMonth}
+      {daysCurrentMonth}
+      {daysNextMonth}
     </>
   );
 };

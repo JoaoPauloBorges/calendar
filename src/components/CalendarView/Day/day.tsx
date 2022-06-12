@@ -78,11 +78,6 @@ interface Props {
   disable?: boolean;
 }
 const Day: FC<Props> = ({ date, disable = false, current = false }) => {
-  useEffect(() => {
-      console.log("nasciii");
-    return () => console.log("morriii")
-  }, []);
-
   const PrefixClassName = "Day";
   const classes = generateClassNamesWithBaseClass(PrefixClassName);
 
@@ -112,7 +107,7 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
 
   const content = useMemo(
     () => getAddReminderForm(form, date, handleSubmit),
-    []
+    [date]
   );
 
   const showModal = () => {
