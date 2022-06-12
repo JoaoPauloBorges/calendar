@@ -5,7 +5,7 @@ import {
   selectCurrentDate,
   decreaseMonth,
   increaseMonth,
-  reset,
+  resetCurrentDate,
 } from "components/CalendarView/stateManagement/current-date.slice";
 import { FC } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -25,7 +25,7 @@ const LayoutHeader: FC = () => {
           <Button
             className={classes("Logo-Button")}
             type="primary"
-            onClick={() => dispatch(reset())}
+            onClick={() => dispatch(resetCurrentDate())}
           >
             2Day
           </Button>

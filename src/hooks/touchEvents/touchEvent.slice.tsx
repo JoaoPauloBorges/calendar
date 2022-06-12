@@ -16,7 +16,7 @@ const touchEventSlice = createSlice({
     dispatchRight(state: Directions | null) {
       return Directions.RIGHT;
     },
-    reset(state: Directions | null) {
+    resetTouchState(state: Directions | null) {
       return Directions.INITIAL;
     },
   }
@@ -24,7 +24,7 @@ const touchEventSlice = createSlice({
 
 const selectTouchEvent = (store: any) => store.touchEvent;
 
-export const { dispatchLeft, dispatchRight, reset } = touchEventSlice.actions;
+export const { dispatchLeft, dispatchRight, resetTouchState } = touchEventSlice.actions;
 
 export { selectTouchEvent };
 

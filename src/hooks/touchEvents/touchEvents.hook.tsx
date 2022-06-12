@@ -1,5 +1,5 @@
 import { createContext, FC, useContext, useEffect } from "react";
-import { dispatchLeft, dispatchRight, reset } from "./touchEvent.slice";
+import { dispatchLeft, dispatchRight, resetTouchState } from "./touchEvent.slice";
 import { useDispatch } from "react-redux";
 
 let xDown = 0;
@@ -62,7 +62,7 @@ const TouchEventsProvider: FC<Props> = ({ children }) => {
     } else {
       dispatch(dispatchRight());
     }
-    setTimeout(() => dispatch(reset()), 70);
+    setTimeout(() => dispatch(resetTouchState()), 70);
   };
 
   useEffect(() => {
