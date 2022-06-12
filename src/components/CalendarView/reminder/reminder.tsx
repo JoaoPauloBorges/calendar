@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import { FC } from "react";
 import {
   deleteReminder,
@@ -9,6 +8,7 @@ import "./reminder.less";
 import { Button, Modal, Row } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
+import { generateClassNamesWithBaseClass } from "utils/utils";
 
 interface Props {
   reminder: ReminderStateItem;
@@ -17,6 +17,7 @@ interface Props {
 
 const Reminder: FC<Props> = ({ reminder, className }) => {
   const PrefixClassName = "Reminder";
+  const classes = generateClassNamesWithBaseClass(PrefixClassName);
 
   const dispatch = useDispatch();
 
@@ -57,7 +58,7 @@ const Reminder: FC<Props> = ({ reminder, className }) => {
     <>
       <Button
         style={{ backgroundColor: reminder.color }}
-        className={classNames(PrefixClassName, className, "Reminder--item")}
+        className={classes(PrefixClassName, className, "Item")}
         onClick={(e) => showModal(e)}
       >
         {reminder.description}

@@ -1,79 +1,23 @@
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import { Button, Layout as AntdLayout } from "antd";
+import { Layout as AntdLayout } from "antd";
 import { FC } from "react";
-import {
-  ButtonLeft,
-  ButtonRight,
-  Month,
-  StyledActions,
-  StyledContent,
-  StyledHeader,
-  StyledLogo,
-  StyledMenu,
-  ThemeActions,
-  Year,
-} from "./layout.style";
-
-import {
-  decreaseMonth,
-  increaseMonth,
-  reset,
-  selectCurrentDate,
-} from "../CalendarView/stateManagement/current-date.slice";
-import { useSelector, useDispatch } from "react-redux";
-
-
-const getMonthName = (month: number) => {
-  const date = new Date();
-  date.setMonth(month);
-  return date.toLocaleDateString("default", { month: "long" });
-};
-
-const LayoutHeader: FC = () => {
-  const currentDate = useSelector(selectCurrentDate);
-  const dispatch = useDispatch();
-
-  return (
-    <StyledHeader>
-      <StyledMenu>
-        <StyledLogo>
-          <Button type="primary" style={{color: "black", fontWeight: "bolder"}} onClick={() => dispatch(reset())}> 2Day </Button>
-        </StyledLogo>
-
-      </StyledMenu>
-      <StyledActions>
-        <Year>{new Date(currentDate).getFullYear()}</Year>
-        <ButtonLeft
-          icon={<LeftOutlined />}
-          ghost
-          shape="circle"
-          onClick={() => dispatch(decreaseMonth())}
-        />
-        <Month>{getMonthName(new Date(currentDate).getMonth())}</Month>
-        <ButtonRight
-          icon={<RightOutlined />}
-          ghost
-          shape="circle"
-          onClick={() => dispatch(increaseMonth())}
-        />
-      </StyledActions>
-      <ThemeActions>
-        <Button type="link" icon={<div>😎</div>} />
-        <Button type="link" icon={<div>🌚</div>} />
-      </ThemeActions>
-    </StyledHeader>
-  );
-};
+import { generateClassNamesWithBaseClass } from "utils/utils";
+import { Content } from "antd/lib/layout/layout";
+import "./layout.less";
+import LayoutHeader from "./LayoutHeader";
 
 interface Props {
   children: React.ReactNode;
 }
-const Layout: FC<Props> = ({ children }) => (
-  <AntdLayout style={{ minHeight: "100vh", width: "100%" }}>
-    <LayoutHeader />
-    <StyledContent>{children}</StyledContent>
-  </AntdLayout>
-);
+const Layout: FC<Props> = ({ children }) => {
+  const PrefixBaseClass = "Layout";
+  const classes = generateClassNamesWithBaseClass(PrefixBaseClass);
+
+  return (
+    <AntdLayout style={{ minHeight: "100vh", width: "100%" }}>
+      <LayoutHeader />
+      <Content className={classes("Content")}>{children}</Content>
+    </AntdLayout>
+  );
+};
 
 export default Layout;
-

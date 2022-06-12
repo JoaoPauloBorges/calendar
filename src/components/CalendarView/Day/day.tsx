@@ -1,8 +1,8 @@
 import { FormOutlined } from "@ant-design/icons";
 import { Form, Input, Modal, TimePicker } from "antd";
-import classNames from "classnames";
 import { FC, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { generateClassNamesWithBaseClass } from "utils/utils";
 import Reminder from "../reminder";
 import {
   addReminder,
@@ -73,6 +73,7 @@ interface Props {
 }
 const Day: FC<Props> = ({ date, disable = false, current = false }) => {
   const PrefixClassName = "Day";
+  const classes = generateClassNamesWithBaseClass(PrefixClassName);
 
   const [form] = Form.useForm();
   const dispatch = useDispatch();
@@ -125,18 +126,16 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
   return (
     <section
       onClick={() => showModal()}
-      className={classNames(PrefixClassName, {
+      className={classes({
         "Day--disable": disable,
         "Day--current": current,
       })}
     >
-      <h5 className={classNames(PrefixClassName, "Day--circle")}>
-        {date.getDate()}
-      </h5>
+      <h5 className={classes("CurrentDayFlag")}>{date.getDate()}</h5>
 
       <section
         style={{ width: "100%", backgroundColor: "green" }}
-        className={classNames(PrefixClassName, "RemindersContainer")}
+        className={classes("RemindersContainer")}
       >
         {current ? reminders : <></>}
       </section>

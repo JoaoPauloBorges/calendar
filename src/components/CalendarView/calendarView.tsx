@@ -5,17 +5,20 @@ import {
 } from "hooks/touchEvents/touchEvent.slice";
 import { useTouchEvents } from "hooks/touchEvents/touchEvents.hook";
 import { FC, useEffect } from "react";
-import { getWeekNames } from "utils/utils";
-import { Grid } from "./calendarView.style";
+import { generateClassNamesWithBaseClass, getWeekNames } from "utils/utils";
 import Month from "./Month";
 import {
   decreaseMonth,
   increaseMonth,
   selectCurrentDate,
 } from "./stateManagement/current-date.slice";
+import "./calendarView.less";
 import { useSelector, useDispatch } from "react-redux";
 
 const CalendarView: FC = () => {
+  const PrefixBaseClass = "CalendarView";
+  const classes = generateClassNamesWithBaseClass(PrefixBaseClass);
+
   const dispatch = useDispatch();
   const currentDate = useSelector(selectCurrentDate);
   const touchEvent = useSelector(selectTouchEvent);
@@ -23,7 +26,7 @@ const CalendarView: FC = () => {
   const { isTouchDevice, isMobileDevice } = useTouchEvents();
 
   const weekNames = getWeekNames().map((weekName, idx) => (
-    <h4 className="CalendarView--DaysOfWeek" key={idx}>
+    <h4 className={classes('DaysOfWeek')} key={idx}>
       {weekName}
     </h4>
   ));
@@ -82,13 +85,13 @@ const CalendarView: FC = () => {
 
   return (
     <>
-      <Grid>
+      <section className={classes("Grid")}>
         {weekNames}
         <Month
           month={new Date(currentDate).getMonth()}
           year={new Date(currentDate).getFullYear()}
         />
-      </Grid>
+      </section>
     </>
   );
 };

@@ -1,0 +1,74 @@
+.LayoutHeader {
+  &.Header {
+    padding: 0 30px 0 10px;
+    display: flex;
+    justify-content: space-between;
+    @media (max-width: 800px) {
+      padding-right: 10px;
+      padding: 0 0 0 10px;
+    }
+  }
+
+  &.Menu {
+    justify-content: space-around;
+  }
+
+  &.Actions {
+    color: white;
+    width: 30%;
+    justify-content: space-around;
+    align-items: center;
+    @media (max-width: 1280px) and (min-width: 721px) {
+      width: 40%;
+    }
+    @media (max-width: 720px) {
+      width: 50%;
+    }
+  }
+
+  &.ThemeActions {
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  &.Year {
+    font-size: 3rem;
+    @media (max-width: 1280px) and (min-width: 721px) {
+      font-size: 2rem;
+    }
+    @media (max-width: 720px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  &.Month {
+    font-size: 2rem;
+    @media (max-width: 1280px) and (min-width: 721px) {
+      font-size: 1.5rem;
+    }
+    @media (max-width: 720px) {
+      font-size: 1rem;
+    }
+  }
+
+  &.ButtonRight {
+    @media (max-width: 360px) {
+      width: 10px;
+    }
+  }
+
+  &.ButtonLeft {
+    @media (max-width: 360px) {
+      width: 10px;
+    }
+  }
+
+  &.Logo {
+    padding: 0 8px;
+  }
+
+  &.Logo-Button {
+    color: black;
+    font-weight: bolder
+  }
+}
