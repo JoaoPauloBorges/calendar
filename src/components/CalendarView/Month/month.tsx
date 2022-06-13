@@ -80,7 +80,7 @@ const Month: FC<Props> = ({ month, year }) => {
     setDaysPastMonth(fillPastMonth(year, month));
     setDaysCurrentMonth(fillCurrentMonth(year, month));
     setDaysNextMonth(fillNextMonth(year, month));
-  }, [month]);
+  }, [month, year]);
 
   return (
     <>

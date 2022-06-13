@@ -1,12 +1,14 @@
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import { Row, Button } from "antd";
+import { Row, Button, DatePicker } from "antd";
 import { Header } from "antd/lib/layout/layout";
 import {
   selectCurrentDate,
   decreaseMonth,
   increaseMonth,
   resetCurrentDate,
+  setCurrentYear,
 } from "components/CalendarView/stateManagement/current-date.slice";
+import moment from "moment";
 import { FC } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { generateClassNamesWithBaseClass, getMonthName } from "utils/utils";
@@ -32,9 +34,15 @@ const LayoutHeader: FC = () => {
         </section>
       </Row>
       <Row className={classes("Actions")}>
-        <span className={classes("Year")}>
-          {new Date(currentDate).getFullYear()}
-        </span>
+        <DatePicker
+          className={classes("Year")}
+          clearIcon={<></>}
+          bordered={false}
+          value={moment(currentDate)}
+          onChange={(date, dateString) => dispatch(setCurrentYear(dateString))}
+          inputReadOnly
+          picker="year"
+        />
         <Button
           className={classes("ButtonLeft")}
           icon={<LeftOutlined />}

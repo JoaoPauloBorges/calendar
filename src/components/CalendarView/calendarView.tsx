@@ -93,6 +93,10 @@ const CalendarView: FC = () => {
     handleSwipe(touchEvent);
   }, [touchEvent]);
 
+  useEffect(() => {
+    console.log("eeeeita", new Date(currentDate))
+  }, [currentDate]);
+
   return (
     <section className={classes("Section")}>
       <div className={classes("Grid")}>
