@@ -5,7 +5,7 @@ import {
   ReminderStateItem,
 } from "./stateManagement/reminders.slice";
 import "./reminder.less";
-import { Button, Form, Modal, Row } from "antd";
+import { Button, Form, Modal } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { generateClassNamesWithBaseClass } from "utils/utils";
@@ -13,10 +13,13 @@ import { getAddReminderForm } from "../Day/day";
 
 interface Props {
   reminder: ReminderStateItem;
-  className?: string;
+  handleClickOnReminder: () => void;
 }
 
-const Reminder: FC<Props> = ({ reminder, className }) => {
+const Reminder: FC<Props> = ({
+  reminder,
+  handleClickOnReminder,
+}) => {
   const PrefixClassName = "Reminder";
   const classes = generateClassNamesWithBaseClass(PrefixClassName);
 
@@ -62,11 +65,19 @@ const Reminder: FC<Props> = ({ reminder, className }) => {
     <div>
       <h2>{reminder.description}</h2>
       <div>{new Date(reminder.when).toString()}</div>
-      <br/>
-      <br/>
+      <br />
+      <br />
       <section className={classes("Details-actions")}>
-        <Button shape="circle" onClick={showEditModal} icon={<EditOutlined />} />
-        <Button shape="circle" onClick={handleDelete} icon={<DeleteOutlined />} />
+        <Button
+          shape="circle"
+          onClick={showEditModal}
+          icon={<EditOutlined />}
+        />
+        <Button
+          shape="circle"
+          onClick={handleDelete}
+          icon={<DeleteOutlined />}
+        />
       </section>
     </div>
   );
@@ -75,6 +86,8 @@ const Reminder: FC<Props> = ({ reminder, className }) => {
 
   const showModal = (evt: any) => {
     evt.stopPropagation();
+    handleClickOnReminder();
+    Modal.destroyAll();
     modal = Modal.info({
       icon: <></>,
       content: RemainderDetails,
@@ -90,7 +103,7 @@ const Reminder: FC<Props> = ({ reminder, className }) => {
     <>
       <Button
         style={{ backgroundColor: reminder.color }}
-        className={classes(PrefixClassName, className, "Item")}
+        className={classes(PrefixClassName, "Item")}
         onClick={(e) => showModal(e)}
       >
         {reminder.description}

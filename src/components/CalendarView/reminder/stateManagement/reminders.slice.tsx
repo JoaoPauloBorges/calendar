@@ -23,7 +23,7 @@ export class ReminderStateItem {
 const initialState: ReminderStateItem[] = [];
 for (let i = 0; i < 7; i++) {
   initialState.push({
-    when: new Date(2022, 6, i).getTime(),
+    when: new Date().getTime(),
     createdAt: new Date(2022, 6, i).getTime(),
     color: Object.values(Colors)[i],
     description: `example ${i}`,

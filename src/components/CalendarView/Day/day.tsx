@@ -1,7 +1,9 @@
 import { FormOutlined } from "@ant-design/icons";
-import { Form, Input, Modal, Select, TimePicker } from "antd";
+import { Button, Form, Input, Modal, Popover, Select, TimePicker } from "antd";
+import useMediaQuery from "hooks/mediaQuery/mediaQuery.hook";
+import { useTouchEvents } from "hooks/touchEvents/touchEvents.hook";
 import moment from "moment";
-import { FC, useMemo } from "react";
+import { FC, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { generateClassNamesWithBaseClass } from "utils/utils";
 import Reminder from "../reminder";
@@ -99,7 +101,7 @@ export const getAddReminderForm = (
             style={{ width: 140 }}
           />
         </Form.Item>
-        <Form.Item name="color" initialValue={colors[0]}>
+        <Form.Item name="color" initialValue={Colors.COLOR5}>
           <Select size="large" style={{ width: "20%" }}>
             {options}
           </Select>
@@ -115,8 +117,12 @@ interface Props {
   disable?: boolean;
 }
 const Day: FC<Props> = ({ date, disable = false, current = false }) => {
+  const isPortrait = useMediaQuery("(max-width: 450px)");
+
+  const maxRemindersPerDay = isPortrait ? 3 : 2;
   const PrefixClassName = "Day";
   const classes = generateClassNamesWithBaseClass(PrefixClassName);
+  const { isTouchDevice } = useTouchEvents();
 
   const [form] = Form.useForm();
   const dispatch = useDispatch();
@@ -146,6 +152,7 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
   );
 
   const showModal = () => {
+    Modal.destroyAll();
     Modal.confirm({
       icon: <></>,
       content: content,
@@ -167,10 +174,22 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
     return new Date(when).toDateString() === new Date(date).toDateString();
   };
 
+  const handleClickOnReminder = () => {
+    setPopVisible(false);
+  };
+
   const myReminders = (useSelector(selectAllReminders) as ReminderStateItem[])
     .filter((reminder) => isMyReminder(reminder.when))
     .sort((a, b) => a.when - b.when)
-    .map((item, idx) => <Reminder key={idx} reminder={item} />);
+    .map((item, idx) => (
+      <Reminder
+        key={idx}
+        handleClickOnReminder={handleClickOnReminder}
+        reminder={item}
+      />
+    ));
+
+  const [popVisible, setPopVisible] = useState(false);
 
   return (
     <section
@@ -182,7 +201,48 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
     >
       <h5 className={classes("CurrentDayFlag")}>{date.getDate()}</h5>
 
-      <section className={classes("RemindersContainer")}>{myReminders}</section>
+      <section className={classes("RemindersContainer")}>
+        {myReminders.slice(0, maxRemindersPerDay)}
+
+        <Popover
+          title="Reminders 1"
+          arrowContent
+          trigger="hover"
+          mouseLeaveDelay={0.05}
+          zIndex={10}
+          content={
+            <section className={classes("RemindersContainer")}>
+              {myReminders.slice(maxRemindersPerDay)}
+            </section>
+          }
+        >
+          <Popover
+            zIndex={20}
+            title="Reminders 2"
+            arrowContent
+            destroyTooltipOnHide
+            visible={popVisible && isTouchDevice()}
+            trigger="click"
+            onVisibleChange={(visible) => setPopVisible(visible)}
+            content={
+              <section className={classes("RemindersContainer")}>
+                {myReminders.slice(maxRemindersPerDay)}
+              </section>
+            }
+          >
+            <Button
+              onClick={(evt) => evt.stopPropagation()}
+              style={{
+                border: "none",
+                display:
+                  myReminders.length > maxRemindersPerDay ? "initial" : "none",
+              }}
+            >
+              {`${myReminders.length - maxRemindersPerDay} more`}
+            </Button>
+          </Popover>
+        </Popover>
+      </section>
     </section>
   );
 };
