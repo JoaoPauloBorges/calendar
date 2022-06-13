@@ -1,21 +1,25 @@
-
-
 .Reminder {
-    &.Item {
-        color: aliceblue;
-        border-radius: 50px;
-        width: 90%;
-        height: 1.5rem;
-        padding: 0;
-        @media (max-width: 450px) {
-            width: 99%;
-          }
+  &.Item {
+    color: aliceblue;
+    border-radius: 5px;
+    width: 95%;
+    max-width: 20ch;
+    height: 1.5rem;
+    padding: 0;
+    padding-inline-start: 5px;
+    @media (max-width: 450px) {
+      width: 100%;
+      max-width: 11ch;
+      font-size: small;
     }
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-    &.Details-actions {
-        display: flex;
-        flex-direction: row-reverse;
-        gap: 1rem;
-    }
-
+  &.Details-actions {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 1rem;
+  }
 }
