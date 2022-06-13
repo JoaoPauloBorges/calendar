@@ -2,7 +2,7 @@
   &.Header {
     padding: 0 30px 0 10px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     @media (max-width: 800px) {
       padding-right: 10px;
       padding: 0 0 0 10px;
@@ -24,11 +24,15 @@
     @media (max-width: 720px) {
       width: 50%;
     }
+    @media (max-width: 450px) {
+      width: -webkit-fill-available
+    }
   }
 
   &.ThemeActions {
     justify-content: flex-end;
     align-items: center;
+    display: none; //TODO until implementation of Dark Theme
   }
 
   &.Year {
