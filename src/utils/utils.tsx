@@ -33,3 +33,17 @@ export const getFirstDayOfTheWeek = (month: number, year: number) => {
 export const getLastDayOfTheWeek = (month: number, year: number) => {
   return new Date(year, month, getMonthDays(month, year)).getDay() + 1;
 };
+
+export const isDocumentBiggerThanView = () => {
+  let scrollHeight = Math.max(
+    document.body.scrollHeight,
+    document.documentElement.scrollHeight,
+    document.body.offsetHeight,
+    document.documentElement.offsetHeight,
+    document.body.clientHeight,
+    document.documentElement.clientHeight
+  );
+
+  const clientHeight = document.documentElement.clientHeight;
+  return clientHeight < scrollHeight;
+};

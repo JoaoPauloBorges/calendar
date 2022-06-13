@@ -5,7 +5,11 @@ import {
 } from "hooks/touchEvents/touchEvent.slice";
 import { useTouchEvents } from "hooks/touchEvents/touchEvents.hook";
 import { FC, useEffect } from "react";
-import { generateClassNamesWithBaseClass, getWeekNames } from "utils/utils";
+import {
+  generateClassNamesWithBaseClass,
+  getWeekNames,
+  isDocumentBiggerThanView,
+} from "utils/utils";
 import Month from "./Month";
 import {
   decreaseMonth,
@@ -37,23 +41,24 @@ const CalendarView: FC = () => {
     const message = isSwipeable
       ? "You can Swipt Left or Right to change Month"
       : "You can scroll to change Month";
-    notification.open({
-      key: "changeMonthTip",
-      placement: "bottom",
-      bottom: !isSwipeable ? 300 : undefined,
-      message,
-      duration: 1.5,
-      closeIcon: <></>,
-      maxCount: 1,
-      style: {
-        borderRadius: "10px",
-        backgroundColor: isSwipeable ? "#efefef88" : "white",
-        textAlign: "center",
-      },
-      onClick: () => {
-        notification.close("changeMonthTip");
-      },
-    });
+    (isSwipeable || !isDocumentBiggerThanView()) &&
+      notification.open({
+        key: "changeMonthTip",
+        placement: "bottom",
+        bottom: !isSwipeable ? 300 : undefined,
+        message,
+        duration: 1.5,
+        closeIcon: <></>,
+        maxCount: 1,
+        style: {
+          borderRadius: "10px",
+          backgroundColor: isSwipeable ? "#efefef88" : "white",
+          textAlign: "center",
+        },
+        onClick: () => {
+          notification.close("changeMonthTip");
+        },
+      });
   };
 
   const handleSwipe = (direction: Directions) => {
@@ -74,17 +79,7 @@ const CalendarView: FC = () => {
       return;
     }
 
-    let scrollHeight = Math.max(
-      document.body.scrollHeight,
-      document.documentElement.scrollHeight,
-      document.body.offsetHeight,
-      document.documentElement.offsetHeight,
-      document.body.clientHeight,
-      document.documentElement.clientHeight
-    );
-
-    const clientHeight = document.documentElement.clientHeight;
-    if (clientHeight < scrollHeight) {
+    if (isDocumentBiggerThanView()) {
       return;
     }
 
@@ -94,8 +89,9 @@ const CalendarView: FC = () => {
     dispatch(decreaseMonth());
   }, 500);
 
+  
   useEffect(() => {
-    showTipChangeMonth();
+    setTimeout(showTipChangeMonth, 1000);
     document.addEventListener("wheel", handleWheel, false);
     return () => {
       document.removeEventListener("wheel", handleWheel);
