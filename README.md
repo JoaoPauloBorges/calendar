@@ -2,7 +2,10 @@
 
 A react app Calendar with reminders, developed to work on mobile devices and dekstop.
 
-It's a full calendar, so you can navigate and add remainders in any date, of any year
+It's a full calendar, so you can navigate and add remainders in any date, of any year.
+
+additional features:
+you can navigate between months by scrolling on desktop (if your screen is large enough to have no scrollbar), or swiping left/right on touch capable devices.
 ### How to test
 
 It is currently hosted on Heroku [https://codelitt-calendar.herokuapp.com](https://codelitt-calendar.herokuapp.com)
