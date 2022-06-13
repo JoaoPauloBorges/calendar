@@ -1,5 +1,9 @@
 import { createContext, FC, useContext, useEffect } from "react";
-import { dispatchLeft, dispatchRight, resetTouchState } from "./touchEvent.slice";
+import {
+  dispatchLeft,
+  dispatchRight,
+  resetTouchState,
+} from "./touchEvent.slice";
 import { useDispatch } from "react-redux";
 
 let xDown = 0;
@@ -7,16 +11,26 @@ let yDown = 0;
 
 let decrease: boolean | null = null;
 
+function handleTouchStart(evt: any) {
+  const firstTouch = evt.touches[0];
+  xDown = firstTouch.clientX;
+  yDown = firstTouch.clientY;
+}
+
+let swiping = false;
+
 export function handleTouchMove(evt: any) {
   if (!xDown || !yDown) {
     return;
   }
+  swiping = true;
   let xUp = evt.touches[0].clientX;
   let yUp = evt.touches[0].clientY;
 
   let xDiff = xDown - xUp;
   let yDiff = yDown - yUp;
 
+  console.log("abs", Math.abs(xDiff));
   if (Math.abs(xDiff) > Math.abs(yDiff)) {
     if (xDiff > 0) decrease = true;
     else decrease = false;
@@ -25,12 +39,6 @@ export function handleTouchMove(evt: any) {
   }
   xDown = 0;
   yDown = 0;
-}
-
-function handleTouchStart(evt: any) {
-  const firstTouch = evt.touches[0];
-  xDown = firstTouch.clientX;
-  yDown = firstTouch.clientY;
 }
 
 const isTouchDevice = () => window.matchMedia("(pointer: coarse)").matches;
@@ -56,12 +64,15 @@ const TouchEventsProvider: FC<Props> = ({ children }) => {
   const dispatch = useDispatch();
 
   const handleTouchEnd = (evt: any) => {
-    if (decrease === null) return;
+    if (decrease === null || swiping === false) return;
     if (decrease) {
       dispatch(dispatchLeft());
     } else {
       dispatch(dispatchRight());
     }
+    xDown = 0;
+    yDown = 0;
+    swiping = false;
     setTimeout(() => dispatch(resetTouchState()), 70);
   };
 
