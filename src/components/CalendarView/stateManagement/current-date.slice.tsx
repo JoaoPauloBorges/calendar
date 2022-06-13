@@ -13,7 +13,6 @@ const currentDateSlice = createSlice({
       return new Date(date.getFullYear(), date.getMonth() - 1, 1).getTime();
     },
     setCurrentYear(state: number, { payload }) {
-      console.log({ payload });
       return new Date(state).setFullYear(payload);
     },
     resetCurrentDate(state: number) {
