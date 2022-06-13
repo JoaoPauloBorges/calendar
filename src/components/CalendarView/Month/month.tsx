@@ -12,9 +12,10 @@ const getLastDayOfTheWeek = (month: number, year: number) => {
   return new Date(year, month, getMonthDays(month, year)).getDay() + 1;
 };
 
-const isCurrentDay = (i: number, month: number) => {
+const isCurrentDay = (i: number, month: number, year:number) => {
   const curr = new Date();
-  return curr.getDate() === i && curr.getMonth() === month;
+  const day = new Date(year, month, i);
+  return day.toDateString() === curr.toDateString();
 };
 
 const fillPastMonth = (year: number, month: number) => {
@@ -45,7 +46,7 @@ const fillCurrentMonth = (year: number, month: number) => {
     daysCurrentMonth.push(
       <Day
         key={"current" + i}
-        current={isCurrentDay(i, month)}
+        current={isCurrentDay(i, month, year)}
         date={new Date(year, month, i)}
       />
     );
