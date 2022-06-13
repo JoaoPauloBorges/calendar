@@ -28,7 +28,8 @@ const Reminder: FC<Props> = ({
 
   const handleEditSubmit = (values: any) => {
     const hours = values.when.format("HH:mm").split(":");
-    const when = new Date(reminder.when).setHours(hours[0], hours[1], 0);
+    const when = new Date(values.dateUpdate).setHours(hours[0], hours[1], 0);
+    delete values.dateUpdate;
     dispatch(
       editReminder({
         ...reminder,

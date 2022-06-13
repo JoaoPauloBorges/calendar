@@ -1,5 +1,14 @@
 import { FormOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Modal, Popover, Select, TimePicker } from "antd";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Modal,
+  Popover,
+  Select,
+  TimePicker,
+} from "antd";
 import useMediaQuery from "hooks/mediaQuery/mediaQuery.hook";
 import { useTouchEvents } from "hooks/touchEvents/touchEvents.hook";
 import moment from "moment";
@@ -31,6 +40,7 @@ export const getAddReminderForm = (
   if (!!valuesToEdit) {
     form.setFields([
       { name: "when", value: moment(valuesToEdit.when), touched: true },
+      { name: "dateUpdate", value: moment(valuesToEdit.when), touched: true },
       { name: "color", value: valuesToEdit.color, touched: true },
       { name: "description", value: valuesToEdit.description, touched: true },
     ]);
@@ -82,11 +92,17 @@ export const getAddReminderForm = (
           ]}
         >
           <Input
+            style={{ width: "100%" }}
             allowClear
             addonBefore={<FormOutlined />}
             placeholder="Description"
           />
         </Form.Item>
+        {!!valuesToEdit && (
+          <Form.Item name="dateUpdate">
+            <DatePicker></DatePicker>
+          </Form.Item>
+        )}
         <Form.Item
           shouldUpdate
           name="when"
