@@ -123,7 +123,7 @@ interface Props {
 const Day: FC<Props> = ({ date, disable = false, current = false }) => {
   const isPortrait = useMediaQuery("(max-width: 450px)");
 
-  const maxRemindersPerDay = isPortrait ? 3 : 6;
+  const maxRemindersPerDay = isPortrait ? 3 : 4;
   const PrefixClassName = "Day";
   const classes = generateClassNamesWithBaseClass(PrefixClassName);
   const { isTouchDevice } = useTouchEvents();
@@ -238,6 +238,7 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
               onClick={(evt) => evt.stopPropagation()}
               style={{
                 border: "none",
+                padding: 0,
                 display:
                   myReminders.length > maxRemindersPerDay ? "initial" : "none",
               }}

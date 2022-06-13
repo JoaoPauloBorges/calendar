@@ -65,8 +65,6 @@ const CalendarView: FC = () => {
   };
 
   const handleWheel = throttle((event: WheelEvent) => {
-    console.log((event as any).target?.classList.value);
-    console.log((event as any).toElement);
     if (
       event.ctrlKey === true ||
       event.shiftKey === true ||
@@ -96,15 +94,15 @@ const CalendarView: FC = () => {
   }, [touchEvent]);
 
   return (
-    <>
-      <section className={classes("Grid")}>
+    <section className={classes("Section")}>
+      <div className={classes("Grid")}>
         {weekNames}
         <Month
           month={new Date(currentDate).getMonth()}
           year={new Date(currentDate).getFullYear()}
         />
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 
