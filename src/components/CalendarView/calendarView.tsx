@@ -14,6 +14,7 @@ import {
 } from "./stateManagement/current-date.slice";
 import "./calendarView.less";
 import { useSelector, useDispatch } from "react-redux";
+import { throttle } from "lodash";
 
 const CalendarView: FC = () => {
   const PrefixBaseClass = "CalendarView";
@@ -26,7 +27,7 @@ const CalendarView: FC = () => {
   const { isTouchDevice, isMobileDevice } = useTouchEvents();
 
   const weekNames = getWeekNames().map((weekName, idx) => (
-    <h4 className={classes('DaysOfWeek')} key={idx}>
+    <h4 className={classes("DaysOfWeek")} key={idx}>
       {weekName}
     </h4>
   ));
@@ -55,15 +56,7 @@ const CalendarView: FC = () => {
     });
   };
 
-  const handleScroll = (event: WheelEvent) => {
-    if (event.deltaY > 0) {
-      return dispatch(increaseMonth());
-    }
-    dispatch(decreaseMonth());
-  };
-
   const handleSwipe = (direction: Directions) => {
-    console.log({ direction });
     if (direction === Directions.INITIAL) return;
     if (direction === Directions.LEFT) {
       return dispatch(decreaseMonth());
@@ -71,11 +64,30 @@ const CalendarView: FC = () => {
     dispatch(increaseMonth());
   };
 
+  const handleWheel = throttle((event: WheelEvent) => {
+    console.log((event as any).target?.classList.value);
+    console.log((event as any).toElement);
+    if (
+      event.ctrlKey === true ||
+      event.shiftKey === true ||
+      event.view?.scrollY !== 0 ||
+      (!(event as any).target?.classList.value.includes("Layout") &&
+        !(event as any).target?.classList.value.includes("Day"))
+    ) {
+      return;
+    }
+
+    if (event.deltaY > 0) {
+      return dispatch(increaseMonth());
+    }
+    dispatch(decreaseMonth());
+  }, 500);
+
   useEffect(() => {
     showTipChangeMonth();
-    document.addEventListener("wheel", handleScroll, false);
+    document.addEventListener("wheel", handleWheel, false);
     return () => {
-      document.removeEventListener("wheel", handleScroll);
+      document.removeEventListener("wheel", handleWheel);
     };
   }, []);
 

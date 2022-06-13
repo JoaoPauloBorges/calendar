@@ -30,7 +30,6 @@ export function handleTouchMove(evt: any) {
   let xDiff = xDown - xUp;
   let yDiff = yDown - yUp;
 
-  console.log("abs", Math.abs(xDiff));
   if (Math.abs(xDiff) > Math.abs(yDiff)) {
     if (xDiff > 0) decrease = true;
     else decrease = false;
