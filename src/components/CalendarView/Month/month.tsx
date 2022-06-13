@@ -1,22 +1,10 @@
 import { FC, useEffect, useState } from "react";
+import {
+  getFirstDayOfTheWeek,
+  getMonthDays,
+  getLastDayOfTheWeek,
+} from "utils/utils";
 import Day from "../Day";
-
-const getMonthDays = (month: number, year: number) => {
-  return new Date(year, month + 1, 0).getDate();
-};
-const getFirstDayOfTheWeek = (month: number, year: number) => {
-  return new Date(year, month, 1).getDay() + 1;
-};
-
-const getLastDayOfTheWeek = (month: number, year: number) => {
-  return new Date(year, month, getMonthDays(month, year)).getDay() + 1;
-};
-
-const isCurrentDay = (i: number, month: number, year:number) => {
-  const curr = new Date();
-  const day = new Date(year, month, i);
-  return day.toDateString() === curr.toDateString();
-};
 
 const fillPastMonth = (year: number, month: number) => {
   const startDayOfTheWeak = getFirstDayOfTheWeek(month, year);
@@ -39,6 +27,11 @@ const fillPastMonth = (year: number, month: number) => {
 };
 
 const fillCurrentMonth = (year: number, month: number) => {
+  const isCurrentDay = (dayToEvaluate: number) => {
+    const day = new Date(year, month, dayToEvaluate);
+    return day.toDateString() === new Date().toDateString();
+  };
+
   const currentMonthTotaldays = getMonthDays(month, year);
 
   const daysCurrentMonth: any[] = [];
@@ -46,7 +39,7 @@ const fillCurrentMonth = (year: number, month: number) => {
     daysCurrentMonth.push(
       <Day
         key={"current" + i}
-        current={isCurrentDay(i, month, year)}
+        current={isCurrentDay(i)}
         date={new Date(year, month, i)}
       />
     );

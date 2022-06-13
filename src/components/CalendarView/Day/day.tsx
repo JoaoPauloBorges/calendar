@@ -3,6 +3,7 @@ import {
   Button,
   DatePicker,
   Form,
+  FormInstance,
   Input,
   Modal,
   Popover,
@@ -26,8 +27,8 @@ import "./day.less";
 
 const { Option } = Select;
 
-export const getAddReminderForm = (
-  form: any,
+export const getAddEditReminderForm = (
+  form: FormInstance,
   date: Date,
   handleSubmit: (values: any) => void,
   valuesToEdit?: ReminderStateItem
@@ -137,11 +138,12 @@ interface Props {
   disable?: boolean;
 }
 const Day: FC<Props> = ({ date, disable = false, current = false }) => {
-  const isPortrait = useMediaQuery("(max-width: 450px)");
-
-  const maxRemindersPerDay = isPortrait ? 3 : 4;
   const PrefixClassName = "Day";
   const classes = generateClassNamesWithBaseClass(PrefixClassName);
+
+  const isPortrait = useMediaQuery("(max-width: 450px)");
+  const maxRemindersPerDay = isPortrait ? 3 : 4;
+
   const { isTouchDevice } = useTouchEvents();
 
   const [form] = Form.useForm();
@@ -167,11 +169,11 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
   };
 
   const content = useMemo(
-    () => getAddReminderForm(form, date, handleSubmit),
+    () => getAddEditReminderForm(form, date, handleSubmit),
     [date]
   );
 
-  const showModal = () => {
+  const showModalAddReminder = () => {
     Modal.destroyAll();
     Modal.confirm({
       icon: <></>,
@@ -190,14 +192,13 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
     });
   };
 
-  const isMyReminder = (when: number) => {
-    return new Date(when).toDateString() === new Date(date).toDateString();
-  };
-
   const handleClickOnReminder = () => {
     setPopVisible(false);
   };
 
+  const isMyReminder = (when: number) => {
+    return new Date(when).toDateString() === new Date(date).toDateString();
+  };
   const myReminders = (useSelector(selectAllReminders) as ReminderStateItem[])
     .filter((reminder) => isMyReminder(reminder.when))
     .sort((a, b) => a.when - b.when)
@@ -213,7 +214,7 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
 
   return (
     <section
-      onClick={() => showModal()}
+      onClick={() => showModalAddReminder()}
       className={classes({
         "Day--disable": disable,
         "Day--current": current,
@@ -225,7 +226,7 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
         {myReminders.slice(0, maxRemindersPerDay)}
 
         <Popover
-          title="Reminders 1"
+          title="Reminders"
           arrowContent
           trigger="hover"
           mouseLeaveDelay={0.05}
@@ -238,7 +239,7 @@ const Day: FC<Props> = ({ date, disable = false, current = false }) => {
         >
           <Popover
             zIndex={20}
-            title="Reminders 2"
+            title="Reminders"
             arrowContent
             destroyTooltipOnHide
             visible={popVisible && isTouchDevice()}

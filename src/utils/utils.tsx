@@ -22,3 +22,14 @@ export function generateClassNamesWithBaseClass(baseClass: string) {
     return classNames(baseClass, ...args);
   };
 }
+
+export const getMonthDays = (month: number, year: number) => {
+  return new Date(year, month + 1, 0).getDate();
+};
+export const getFirstDayOfTheWeek = (month: number, year: number) => {
+  return new Date(year, month, 1).getDay() + 1;
+};
+
+export const getLastDayOfTheWeek = (month: number, year: number) => {
+  return new Date(year, month, getMonthDays(month, year)).getDay() + 1;
+};

@@ -9,17 +9,14 @@ import { Button, Form, Modal } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { generateClassNamesWithBaseClass } from "utils/utils";
-import { getAddReminderForm } from "../Day/day";
+import { getAddEditReminderForm } from "../Day/day";
 
 interface Props {
   reminder: ReminderStateItem;
   handleClickOnReminder: () => void;
 }
 
-const Reminder: FC<Props> = ({
-  reminder,
-  handleClickOnReminder,
-}) => {
+const Reminder: FC<Props> = ({ reminder, handleClickOnReminder }) => {
   const PrefixClassName = "Reminder";
   const classes = generateClassNamesWithBaseClass(PrefixClassName);
 
@@ -40,7 +37,8 @@ const Reminder: FC<Props> = ({
     Modal.destroyAll();
   };
 
-  const editContent = getAddReminderForm(
+
+  const editContent = getAddEditReminderForm(
     form,
     new Date(reminder.when),
     handleEditSubmit,
