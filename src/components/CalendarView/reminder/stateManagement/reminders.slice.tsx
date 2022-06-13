@@ -26,7 +26,7 @@ for (let i = 0; i < 7; i++) {
     when: new Date().getTime(),
     createdAt: new Date(2022, 6, i).getTime(),
     color: Object.values(Colors)[i],
-    description: `example ${i} asdasdhasd asdh asdjhasd asdjha sdasdhasd`,
+    description: `example ${i}`,
   } as ReminderStateItem);
 }
 
