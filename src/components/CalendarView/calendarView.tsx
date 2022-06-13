@@ -68,10 +68,23 @@ const CalendarView: FC = () => {
     if (
       event.ctrlKey === true ||
       event.shiftKey === true ||
-      event.view?.scrollY !== 0 ||
       (!(event as any).target?.classList.value.includes("Layout") &&
         !(event as any).target?.classList.value.includes("Day"))
     ) {
+      return;
+    }
+
+    let scrollHeight = Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.offsetHeight,
+      document.body.clientHeight,
+      document.documentElement.clientHeight
+    );
+
+    const clientHeight = document.documentElement.clientHeight;
+    if (clientHeight < scrollHeight) {
       return;
     }
 
