@@ -75,6 +75,10 @@ export const getAddReminderForm = (
               required: true,
               message: "Please input your reminder description!",
             },
+            {
+              max: 30,
+              message: "Description should be less than 31 character",
+            },
           ]}
         >
           <Input
@@ -119,7 +123,7 @@ interface Props {
 const Day: FC<Props> = ({ date, disable = false, current = false }) => {
   const isPortrait = useMediaQuery("(max-width: 450px)");
 
-  const maxRemindersPerDay = isPortrait ? 3 : 2;
+  const maxRemindersPerDay = isPortrait ? 3 : 6;
   const PrefixClassName = "Day";
   const classes = generateClassNamesWithBaseClass(PrefixClassName);
   const { isTouchDevice } = useTouchEvents();
