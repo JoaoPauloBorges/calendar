@@ -63,7 +63,11 @@ const TouchEventsProvider: FC<Props> = ({ children }) => {
   const dispatch = useDispatch();
 
   const handleTouchEnd = (evt: any) => {
-    if (decrease === null || swiping === false) return;
+    const isTouchFromHome =
+      (evt as any).target?.classList.value.includes("Layout") ||
+      (evt as any).target?.classList.value.includes("Day");
+
+    if (decrease === null || swiping === false || !isTouchFromHome) return;
     if (decrease) {
       dispatch(dispatchLeft());
     } else {
